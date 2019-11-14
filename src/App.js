@@ -1,5 +1,5 @@
 //TODO: STEP 1 - Import the useState hook.
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
 
@@ -27,6 +27,21 @@ function App() {
     setAwayCount(awayCount + 7);
   }
 
+  const [time, setTime] = useState(0);
+  const secondsPassed = useRef(0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const date = new Date()
+      secondsPassed.current = secondsPassed.current + 1;
+      setTime(date.toLocaleTimeString());
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [time]);
+
 
   return (
     <div className="container">
@@ -39,7 +54,7 @@ function App() {
 
             <div className="home__score">{homeCount}</div>
           </div>
-          <div className="timer">00:03</div>
+          <div className="timer">{secondsPassed.current}</div>
           <div className="away">
             <h2 className="away__name">Tigers</h2>
             <div className="away__score">{awayCount}</div>
